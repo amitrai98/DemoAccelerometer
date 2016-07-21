@@ -16,4 +16,56 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Hello World!"/>
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:id="@+id/layout_yes"
+        android:orientation="vertical"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:onClick="startFootStep"
+        android:background="@drawable/yes">
+
+        <ImageView
+            android:id="@+id/yes"
+            android:src="@drawable/yessmile"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:text="Yes"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight=".3"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:orientation="vertical"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:onClick="stopFootStep"
+        android:background="@drawable/no">
+
+        <ImageView
+            android:id="@+id/no"
+            android:src="@drawable/nosmile"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+        <TextView
+            android:text="No"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight=".3"/>
+    </LinearLayout>
+
+
 </RelativeLayout>

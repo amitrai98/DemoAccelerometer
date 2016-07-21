@@ -12,7 +12,7 @@ import java.util.ArrayList;
 /**
  * Created by amitrai on 18/7/16.
  */
-public class StepDetector implements SensorEventListener {
+public class StepDetector implements SensorEventListener , ActivtyListeners  {
     private final static String TAG = "StepDetector";
     private float   mLimit = 10;
     private float   mLastValues[] = new float[3*2];
@@ -23,6 +23,7 @@ public class StepDetector implements SensorEventListener {
     private float   mLastExtremes[][] = { new float[3*2], new float[3*2] };
     private float   mLastDiff[] = new float[3*2];
     private int     mLastMatch = -1;
+    private  StepListener listener;
 
 
     private SensorManager mSensorManager;
@@ -37,8 +38,10 @@ public class StepDetector implements SensorEventListener {
         mScale[0] = - (h * 0.5f * (1.0f / (SensorManager.STANDARD_GRAVITY * 2)));
         mScale[1] = - (h * 0.5f * (1.0f / (SensorManager.MAGNETIC_FIELD_EARTH_MAX)));
         addStepListener(listener);
+        this.listener = listener;
         mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         registerDetector();
+        setSensitivity(8f);
     }
 
     public void setSensitivity(float sensitivity) {
@@ -80,10 +83,11 @@ public class StepDetector implements SensorEventListener {
                             boolean isNotContra = (mLastMatch != 1 - extType);
 
                             if (isAlmostAsLargeAsPrevious && isPreviousLargeEnough && isNotContra) {
-                                Log.i(TAG, "step");
-                                for (StepListener stepListener : mStepListeners) {
-                                    stepListener.onStep();
-                                }
+                                Log.e(TAG, "step");
+                                listener.onStep();
+//                                for (StepListener stepListener : mStepListeners) {
+//                                    stepListener.onStep();
+//                                }
                                 mLastMatch = extType;
                             }
                             else {
@@ -106,9 +110,7 @@ public class StepDetector implements SensorEventListener {
 
     private void registerDetector() {
         mSensor = mSensorManager.getDefaultSensor(
-                Sensor.TYPE_ACCELEROMETER /*|
-            Sensor.TYPE_MAGNETIC_FIELD |
-            Sensor.TYPE_ORIENTATION*/);
+                Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(this,
                 mSensor,
                 SensorManager.SENSOR_DELAY_FASTEST);
@@ -116,5 +118,15 @@ public class StepDetector implements SensorEventListener {
 
     private void unregisterDetector() {
         mSensorManager.unregisterListener(this);
+    }
+
+    @Override
+    public void onResume() {
+     registerDetector();
+    }
+
+    @Override
+    public void onPause() {
+        unregisterDetector();
     }
 }
